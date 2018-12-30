@@ -27,7 +27,7 @@ conn = psycopg2.connect(
                         host=url.hostname,
                         port=url.port
                         )
-from library50 import cs50
+
 #Configure application
 app = Flask(__name__)
 

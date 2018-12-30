@@ -20,7 +20,7 @@ from ortools.sat.python import cp_model
 
 from google.protobuf import text_format
 from collections import defaultdict
-from library import cs50
+
 import sqlalchemy
 import urlparse
 import psycopg2
