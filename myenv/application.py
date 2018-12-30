@@ -14,15 +14,50 @@ from schedule_generator import main as sc
 from schedule_generator import PARSER, solve_shift_scheduling
 from talent_schedule_generator import main as tc
 from datetime import datetime, date, time
+import sqlalchemy
 
-
-from cs50 import SQL
+import urlparse
+import psycopg2
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
+conn = psycopg2.connect(
+                        database=url.path[1:],
+                        user=url.username,
+                        password=url.password,
+                        host=url.hostname,
+                        port=url.port
+                        )
+from library50 import cs50
 #Configure application
 app = Flask(__name__)
 
-# Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///myenv/database.db")
 
+class SQL(object):
+    def __init__(self, url):
+        try:
+            self.engine = sqlalchemy.create_engine(url)
+        except Exception as e:
+            raise RuntimeError(e)
+    def execute(self, text, *multiparams, **params):
+        try:
+            statement = sqlalchemy.text(text).bindparams(*multiparams, **params)
+            result = self.engine.execute(str(statement.compile(compile_kwargs={"literal_binds": True})))
+            # SELECT
+            if result.returns_rows:
+                rows = result.fetchall()
+                return [dict(row) for row in rows]
+            # INSERT
+            elif result.lastrowid is not None:
+                return result.lastrowid
+            # DELETE, UPDATE
+            else:
+                return result.rowcount
+        except sqlalchemy.exc.IntegrityError:
+            return None
+        except Exception as e:
+            raise RuntimeError(e)
+# Configure CS50 Library to use POSTgres database
+db = SQL(os.environ["DATABASE_URL"])
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):

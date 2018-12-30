@@ -20,11 +20,22 @@ from ortools.sat.python import cp_model
 
 from google.protobuf import text_format
 from collections import defaultdict
-from cs50 import SQL
+from library50 import cs50
+import sqlalchemy
+import urlparse
+import psycopg2
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
+conn = psycopg2.connect(
+                        database=url.path[1:],
+                        user=url.username,
+                        password=url.password,
+                        host=url.hostname,
+                        port=url.port
+                        )
 
 
-
-db = SQL("sqlite:///myenv/database.db")
+db = SQL(os.environ["DATABASE_URL"])
 
 """Get the variables for the calculation(employee count, requests etc.) """
 total = 0
