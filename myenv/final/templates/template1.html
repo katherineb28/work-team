@@ -1,0 +1,34 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+         $(function() {
+          $('btn-generate-talent').bind('click', function() {
+            $.getJSON('/create_talent_schedule',
+                function(data) {
+            });
+            return false;
+          });
+        });
+
+</script>
+{% extends "index.html" %}
+
+{% block title %}
+    Random Example Schedule
+
+{% endblock %}
+{% block main %}
+<div id = "content">
+  <form action="/create_talent_schedule" method="post">
+        <button class="btn btn-primary" name = "btn" id="btn-generate-talent" type="submit" onclick="loading();" value = "Talent">Generate Talent Schedule</button>
+    </form>
+</div>
+{% endblock %}
+{% block div %}
+<div id="loading"/></div>
+<div id = "content1">
+<h3>{{month}}</h3>
+            {% include 'talent-schedule.html'%}
+
+<button class = "btn btn-primary" id = "btn-download"><a href ="{{ url_for('download_as_csv', role='Talent') }}">Save as Excel</a></button>
+  </div>
+{% endblock %}

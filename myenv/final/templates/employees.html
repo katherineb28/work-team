@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Employees
+{% endblock %}
+
+{% block main %}
+    <h3>Add an Employee</h3>
+    <form action="/employees" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="first-name" placeholder="First Name" type="text"/>
+        </div>
+         <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="last-name" placeholder="Last name" type="text"/>
+        </div>
+         <div class="form-group">
+            <select autocomplete="off" autofocus class="form-control" name="role"type="text">
+                <option value = "Manager">Manager</option>
+                <option value = "Talent">Talent</option>
+            </select>
+        </div>
+         <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="email" placeholder="Email" type="text"/>
+        </div>
+        <button class="btn btn-primary" type="submit">Add New Employee</button>
+    </form>
+{% endblock %}
+{% block div %}
+<h3>My Team</h3>
+<table class = "employee-list" style="width:100%">
+   <thead>
+            <tr>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees %}
+            <tr>
+                 <td>{{employee.first_name}}</td>
+                 <td>{{employee.last_name}}</td>
+                 <td>{{employee.email}}</td>
+                 <td>{{employee.role}}</td>
+            </tr>
+                {% endfor %}
+        <tfoot>
+            <tr>
+                <td colspan="2" style="font-weight: bold;">Total managers</td>
+                <td colspan = "2" style="font-weight: bold;">{{ total_managers}}</td>
+            <tr>
+                <td colspan="2" style="font-weight: bold;">Total talents</td>
+                <td colspan = "2" style="font-weight: bold;">{{ total_talents}}</td>
+            </tr>
+        </tfoot>
+</table>
+{% endblock %}
+
+

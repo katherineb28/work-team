@@ -1,0 +1,126 @@
+body{
+    background-image:url("white-waves.png");
+    margin:0;
+   padding:0;
+   height:100%;
+}
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+/* style the logo*/
+nav .navbar-brand .blue
+{
+    color: #537fbe;
+    font-family:'Vollkorn', serif;
+}
+
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+    box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+   /* center form controls */
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+ select.form-control, input[type="text"]{
+      /* make the form a certain width to fit */
+      width:40%;
+      box-sizing:border-box;
+    }
+
+
+table.employee-list, tr, th, td{
+    /* make the data left-align*/
+    text-align:left;
+}
+
+th,td {
+    /*style table rows*/
+    padding:5px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{
+    background-color: #f5f5f5;
+}
+th {
+    /*style the table's header elements*/
+    background-color:#537fbe;
+    color:white;
+    text-align:center;
+}
+
+.btn.btn-primary{
+    /*override submit button's default color*/
+    background-color:#537fbe;
+    border:none;
+}
+#loading{
+    z-index: 1000;
+    width: 35px;
+    height: 35px;
+    background: url(ajax-loader.gif) no-repeat;
+    cursor: wait;
+    display:none;
+}
+a{
+    text-decoration:none;
+    color:white;
+}
+a:hover{
+     text-decoration:none;
+     color:black;
+}
+
+
+#btn-generate-manager:hover,#btn-generate-talent:hover{
+    color:black;
+}
+#btn-download{
+    margin:5px;
+}
+
+.menu-items{
+margin:3%;
+padding:5%;
+background-color:#88a4cc;
+color:white;
+border-radius:15px;
+}
+#foot{
+   position:fixed;
+   bottom:0;
+   width:100%;
+   height:40px;
+}
+.container{
+    min-height:100%;
+    position:relative;
+}
+.row{
+    paddiing-bottom:10px;
+}
