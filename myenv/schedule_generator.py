@@ -22,10 +22,38 @@ from google.protobuf import text_format
 from collections import defaultdict
 
 import sqlalchemy
-import urlparse
+from urllib.parse import urlparse
+import urllib.parse
+import os
+
 import psycopg2
-urlparse.uses_netloc.append("postgres")
-url = urlparse.urlparse(os.environ["DATABASE_URL"])
+
+class SQL(object):
+    def __init__(self, url):
+        try:
+            self.engine = sqlalchemy.create_engine(url)
+        except Exception as e:
+            raise RuntimeError(e)
+    def execute(self, text, *multiparams, **params):
+        try:
+            statement = sqlalchemy.text(text).bindparams(*multiparams, **params)
+            result = self.engine.execute(str(statement.compile(compile_kwargs={"literal_binds": True})))
+            # SELECT
+            if result.returns_rows:
+                rows = result.fetchall()
+                return [dict(row) for row in rows]
+            # INSERT
+            elif result.lastrowid is not None:
+                return result.lastrowid
+            # DELETE, UPDATE
+            else:
+                return result.rowcount
+        except sqlalchemy.exc.IntegrityError:
+            return None
+        except Exception as e:
+            raise RuntimeError(e)
+urllib.parse.uses_netloc.append("postgres")
+url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 conn = psycopg2.connect(
                         database=url.path[1:],
                         user=url.username,
@@ -39,7 +67,7 @@ db = SQL(os.environ["DATABASE_URL"])
 """Get the variables for the calculation(employee count, requests etc.) """
 total = 0
 total = db.execute("SELECT COUNT(role) FROM employees WHERE role = :role", role = "Manager")
-total = total[0]['COUNT(role)']
+
 # Request: (employee, shift, day, weight)
 requests = []
 night_feature = []
@@ -240,7 +268,7 @@ def solve_shift_scheduling(params, output_proto):
     """Solves the shift scheduling problem."""
     # Data
     final_roster = defaultdict(list)
-    num_employees = total
+    num_employees = total[0]['count']
     num_weeks = 4
     shifts = ['OFF', '7', '15', '23']
     # Shift constraints on continuous sequence :

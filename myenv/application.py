@@ -15,11 +15,11 @@ from schedule_generator import PARSER, solve_shift_scheduling
 from talent_schedule_generator import main as tc
 from datetime import datetime, date, time
 import sqlalchemy
-
-import urlparse
+import urllib.parse
+from urllib.parse import urlparse
 import psycopg2
-urlparse.uses_netloc.append("postgres")
-url = urlparse.urlparse(os.environ["DATABASE_URL"])
+urllib.parse.uses_netloc.append("postgres")
+url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 conn = psycopg2.connect(
                         database=url.path[1:],
                         user=url.username,
@@ -84,12 +84,12 @@ def delete_requests(id):
 @app.route("/download_as_csv/<role>",methods = ["GET","POST"])
 def download_as_csv(role):
     if role == 'Manager':
-        return send_file('/home/ubuntu/workspace/final/templates/manager-schedule-for-December.csv',
+        return send_file('templates/manager-schedule-for-December.csv',
                      mimetype='text/csv',
                      attachment_filename='manager-schedule-for-December.csv',
                      as_attachment=True)
     else:
-        return send_file('/home/ubuntu/workspace/final/templates/talent-schedule-for-December.csv',
+        return send_file('templates/talent-schedule-for-December.csv',
                      mimetype='text/csv',
                      attachment_filename='talent-schedule-for-December.csv',
                      as_attachment=True)
@@ -126,8 +126,8 @@ def employees():
     employees = db.execute("SELECT * FROM employees ORDER BY role ASC")
     total_managers = db.execute("SELECT COUNT(role) FROM employees WHERE role = :role", role = "Manager")
     total_talents = db.execute("SELECT COUNT(role) FROM employees WHERE role = :role", role = "Talent")
-    total_managers = total_managers[0]['COUNT(role)']
-    total_talents = total_talents[0]['COUNT(role)']
+    total_managers = total_managers[0]['count']
+    total_talents = total_talents[0]['count']
     return render_template("employees.html",employees = employees,  total_talents = total_talents,total_managers = total_managers)
 
 @app.route("/requests", methods=["GET", "POST"])
@@ -162,7 +162,7 @@ def requests():
     employees = db.execute("SELECT * FROM employees ORDER BY first_name ASC")
     requests = db.execute("SELECT * FROM requests")
     total_requests = db.execute("SELECT COUNT(*) FROM requests")
-    total_requests = total_requests[0]['COUNT(*)']
+    total_requests = total_requests[0]['count']
     return render_template("requests.html", employees = employees,requests = requests, total_requests = total_requests)
 
 @app.route("/template", methods=["GET", "POST"])
@@ -194,9 +194,9 @@ def make_schedule():
         schedule.columns=["M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S"]
         schedule.rename(index={0:"Jose",1: 'Claudia',2:"Alba",3:"Javi",4:'Varun'},inplace = True)
         path = r'final/templates'
-        schedule.to_html('/home/ubuntu/workspace/final/templates/new-schedule.html')
+        schedule.to_html('templates/new-schedule.html')
         filename1 = 'manager-schedule-for-' + month + '.csv'
-        schedule.to_csv(os.path.join(r"/home/ubuntu/workspace/final/templates",filename1))
+        schedule.to_csv(os.path.join(r"templates",filename1))
         return render_template("template.html", month = month)
 
 @app.route('/create_talent_schedule', methods = ["POST","GET"])
@@ -214,9 +214,9 @@ def make_talent_schedule():
         talent_schedule.columns=["M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S","M", "T", "W", "T", "F", "S","S"]
         talent_schedule.rename(index={0:"Kate",1: 'Victor',2:"Jorge",3:"Regina",4:'Alvara',5:'Borja',6:'Ana',7:'Cris',8:'Lora',9:'Natalia',10:'Carles'},inplace = True)
         path = r'final/templates'
-        talent_schedule.to_html('/home/ubuntu/workspace/final/templates/talent-schedule.html')
+        talent_schedule.to_html('templates/talent-schedule.html')
         filename2 = 'talent-schedule-for-'+ month + '.csv'
-        talent_schedule.to_csv(os.path.join(r"/home/ubuntu/workspace/final/templates/",filename2))
+        talent_schedule.to_csv(os.path.join(r"templates/",filename2))
         return render_template("template1.html", month = month)
 
 def apology(message, code=400):
