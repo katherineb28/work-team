@@ -16,7 +16,7 @@ from talent_schedule_generator import main as tc
 from datetime import datetime, date, time
 import sqlalchemy
 import urllib.parse
-from urllib.parse import urlparse
+
 import psycopg2
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])

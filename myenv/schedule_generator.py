@@ -22,7 +22,6 @@ from google.protobuf import text_format
 from collections import defaultdict
 
 import sqlalchemy
-from urllib.parse import urlparse
 import urllib.parse
 import os
 

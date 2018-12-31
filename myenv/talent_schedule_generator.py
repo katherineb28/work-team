@@ -21,7 +21,6 @@ from ortools.sat.python import cp_model
 from google.protobuf import text_format
 from collections import defaultdict
 import sqlalchemy
-from urllib.parse import urlparse
 import psycopg2
 
 class SQL(object):
