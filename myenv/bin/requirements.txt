@@ -63,7 +63,7 @@ pylint==1.9.3
 pylint-django==0.7.2
 pylint-flask==0.5
 pylint-plugin-utils==0.2.6
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 Pyphen==0.9.4
 python-dateutil==2.7.5
 python-magic==0.4.15
